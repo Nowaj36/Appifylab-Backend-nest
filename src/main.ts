@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/error.filter';
 
@@ -10,6 +11,11 @@ async function bootstrap() {
   app.enableCors({
     origin: ['http://localhost:3000'],
     credentials: true,
+  });
+
+  // Serve static uploads folder
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+    prefix: '/uploads',
   });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
